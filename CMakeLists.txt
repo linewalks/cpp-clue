@@ -56,10 +56,15 @@ target_link_libraries(clue_grpc_proto
   ${_GRPC_GRPCPP}
   ${_PROTOBUF_LIBPROTOBUF})
 
+# clue client
+file(GLOB SOURCES "./src/*.cc")
+
 # Targets
 foreach(_target
+  "clue"
   test_client)
-  add_executable(${_target} "./src/${_target}.cc")
+  add_executable(${_target}
+    ${SOURCES})
   target_link_libraries(${_target}
     clue_grpc_proto
     ${_REFLECTION}
