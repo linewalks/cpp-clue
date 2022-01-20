@@ -22,6 +22,7 @@
 
 #include <grpcpp/grpcpp.h>
 #include "clue.grpc.pb.h"
+#include "clue.h"
 
 using grpc::Channel;
 using grpc::ClientContext;
@@ -95,11 +96,24 @@ int main(int argc, char** argv) {
   } else {
     target_str = "localhost:50051";
   }
-  CLUEClient client(
-      grpc::CreateChannel(target_str, grpc::InsecureChannelCredentials()));
-  std::string user("world");
-  std::string reply = client.SayHello(user);
-  std::cout << "client received: " << reply << std::endl;
+
+  clue::CLUE clue_client(
+      std::string("localhost"),
+      9999,
+      std::string("test@linewalks.com"),
+      std::string("q1w2e3r4!"));
+
+  clue::Connection conn = clue_client.Connect();
+
+  ResponseCohortList response = conn.GetCohortList(1, 10, "");
+  int cohort_size = response.cohort_list_size();
+  std::cout << "cohort size " << cohort_size << std::endl;
+
+  if (cohort_size > 0) {
+    CohortInfo cohort_info = response.cohort_list()[0];
+    std::cout << "cohort id " << cohort_info.id() << std::endl;
+    std::cout << "cohort name " << cohort_info.name() << std::endl;
+  }
 
   return 0;
 }
