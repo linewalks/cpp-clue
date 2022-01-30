@@ -45,6 +45,8 @@ add_custom_command(
 # Include generated *.pb.h files
 include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 
+set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS_INIT} -std=c++11 -fPIC")
+
 # clue_grpc_proto
 add_library(clue_grpc_proto
   ${clue_grpc_srcs}
@@ -61,9 +63,19 @@ file(GLOB SOURCES "./src/*.cc")
 
 # Targets
 foreach(_target
-  "clue"
-  test_client)
+  "test_client")
   add_executable(${_target}
+    ${SOURCES})
+  target_link_libraries(${_target}
+    clue_grpc_proto
+    ${_REFLECTION}
+    ${_GRPC_GRPCPP}
+    ${_PROTOBUF_LIBPROTOBUF})
+endforeach()
+
+foreach(_target
+  "clue")
+  add_library(${_target}
     ${SOURCES})
   target_link_libraries(${_target}
     clue_grpc_proto

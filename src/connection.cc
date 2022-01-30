@@ -25,7 +25,6 @@ bool Connection::Login(string username, string password) {
   Status status = stub_->AuthLogin(&context, request, &response);
   if (status.ok()) {
     token_ = response.access_token();
-    std::cout << token_ << std::endl;
     return true;
   } else {
     std::cout << status.error_code() << ": " << status.error_message()
@@ -48,13 +47,7 @@ ResponseCohortList Connection::GetCohortList(int page, int length, string term) 
   AuthorizeContext(&context);
   ResponseCohortList response;
 
-  Status status = stub_->GetCohortList(&context, request, &response);
-  if (status.ok()) {
-    std::cout << response.DebugString() << std::endl;
-  } else {
-    std::cout << status.error_code() << ": " << status.error_message()
-              << std::endl;
-  }
+  stub_->GetCohortList(&context, request, &response);
 
   // TODO return type을 어떻게 하지....
   // R과 연결해보고 결정해야할듯
@@ -63,6 +56,14 @@ ResponseCohortList Connection::GetCohortList(int page, int length, string term) 
 
 ResponseCohortList Connection::GetCohortList() {
   return GetCohortList(1, 0, "");
+}
+
+std::shared_ptr<Stream<RequestCohortStream, PersonInfo>> Connection::GetCohortPersonTable(int cohort_id) {
+  std::shared_ptr<ClientContext> context(new ClientContext());
+  AuthorizeContext(context.get());
+  std::shared_ptr<Stream<RequestCohortStream, PersonInfo>> person_stream(
+      new Stream<RequestCohortStream, PersonInfo>(stub_.get(), context.get(), cohort_id));
+  return person_stream;
 }
 
 }
