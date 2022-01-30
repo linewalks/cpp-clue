@@ -115,5 +115,27 @@ int main(int argc, char** argv) {
     std::cout << "cohort name " << cohort_info.name() << std::endl;
   }
 
+  std::cout << "GetCohortPersonTable" << std::endl;
+
+  std::shared_ptr<clue::Stream<RequestCohortStream, PersonInfo>> person_stream = conn.GetCohortPersonTable(527);
+
+  std::cout << "Outside" << std::endl;
+  std::cout << "person_stream " << person_stream << std::endl;
+  PersonInfo person = person_stream->FetchOne();
+  std::cout << "Person : " << person.person_id() << std::endl;
+
+  sleep(1);
+  PersonInfo person2 = person_stream->FetchOne();
+  std::cout << "Person2 : " << person2.person_id() << std::endl;
+
+  sleep(0.5);
+  std::vector<PersonInfo> person_vector = person_stream->FetchMany(10);
+  std::cout << "Person vector size : " << person_vector.size() << std::endl;
+
+  std::cout << "GetCohortPersonTableDone" << std::endl;
+
+  person_stream->Close();
+  sleep(1);
+
   return 0;
 }
