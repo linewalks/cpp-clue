@@ -9,12 +9,13 @@ CLUE::CLUE(string host, int port, string username, string password)
       password_(password) {
 }
 
-Connection CLUE::Connect() {
-  return Connection(
-      host_,
-      port_,
-      username_,
-      password_);
+std::shared_ptr<Connection> CLUE::Connect() {
+  return std::shared_ptr<Connection>(
+      new Connection(
+          host_,
+          port_,
+          username_,
+          password_));
 };
 
 } // namespace clue

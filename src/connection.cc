@@ -5,12 +5,9 @@ namespace clue {
 
 Connection::Connection(string host, int port, string username, string password) {
   string address = host + ":" + std::to_string(port);
-  
   std::shared_ptr<Channel> channel = grpc::CreateChannel(address, grpc::InsecureChannelCredentials());
-  // grpc::InterceptChannel(channel, new AuthInterceptor(username, password));
 
   stub_ = CLUE::NewStub(channel);
-
   connected_ = Login(username, password);
 }
 
@@ -45,8 +42,8 @@ ResponseCohortList Connection::GetCohortList(int page, int length, string term) 
 
   ClientContext context;
   AuthorizeContext(&context);
-  ResponseCohortList response;
 
+  ResponseCohortList response;
   stub_->GetCohortList(&context, request, &response);
 
   // TODO return type을 어떻게 하지....
