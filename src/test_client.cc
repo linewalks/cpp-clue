@@ -69,43 +69,33 @@ int main(int argc, char** argv) {
   int cohort_size = response.cohort_list_size();
   std::cout << "cohort size " << cohort_size << std::endl;
 
-  // const google::protobuf::Descriptor* desc = ResponseCohortList::descriptor();
-  // std::cout << "field count " << desc->DebugString() << std::endl;
-  // std::cout << "field count " << desc->field_count() << std::endl;
-  // std::any_of
-  // std::map<std::string, 
-  // for (int i = 0; i < desc->field_count(); ++i) {
-  //   const google::protobuf::FieldDescriptor* field = desc->field(i);
-  //   std::string name = field->name();
-  // }
+  if (cohort_size > 0) {
+    CohortInfo cohort_info = response.cohort_list()[0];
+    std::cout << "cohort id " << cohort_info.id() << std::endl;
+    std::cout << "cohort name " << cohort_info.name() << std::endl;
+  }
 
-  // if (cohort_size > 0) {
-  //   CohortInfo cohort_info = response.cohort_list()[0];
-  //   std::cout << "cohort id " << cohort_info.id() << std::endl;
-  //   std::cout << "cohort name " << cohort_info.name() << std::endl;
-  // }
+  std::cout << "GetCohortPersonTable" << std::endl;
 
-  // std::cout << "GetCohortPersonTable" << std::endl;
+  std::shared_ptr<clue::Stream<RequestCohortStream, PersonInfo>> person_stream = conn->GetCohortPersonTable(527);
 
-  // std::shared_ptr<clue::Stream<RequestCohortStream, PersonInfo>> person_stream = conn.GetCohortPersonTable(527);
+  std::cout << "Outside" << std::endl;
+  std::cout << "person_stream " << person_stream << std::endl;
+  PersonInfo person = person_stream->FetchOne();
+  std::cout << "Person : " << person.person_id() << std::endl;
 
-  // std::cout << "Outside" << std::endl;
-  // std::cout << "person_stream " << person_stream << std::endl;
-  // PersonInfo person = person_stream->FetchOne();
-  // std::cout << "Person : " << person.person_id() << std::endl;
+  sleep(1);
+  PersonInfo person2 = person_stream->FetchOne();
+  std::cout << "Person2 : " << person2.person_id() << std::endl;
 
-  // sleep(1);
-  // PersonInfo person2 = person_stream->FetchOne();
-  // std::cout << "Person2 : " << person2.person_id() << std::endl;
+  sleep(0.5);
+  std::vector<PersonInfo> person_vector = person_stream->FetchMany(10);
+  std::cout << "Person vector size : " << person_vector.size() << std::endl;
 
-  // sleep(0.5);
-  // std::vector<PersonInfo> person_vector = person_stream->FetchMany(10);
-  // std::cout << "Person vector size : " << person_vector.size() << std::endl;
+  std::cout << "GetCohortPersonTableDone" << std::endl;
 
-  // std::cout << "GetCohortPersonTableDone" << std::endl;
-
-  // person_stream->Close();
-  // sleep(1);
+  person_stream->Close();
+  sleep(1);
 
   return 0;
 }

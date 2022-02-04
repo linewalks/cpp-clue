@@ -1,3 +1,5 @@
+#ifndef CLUE_CONNECTION_H
+#define CLUE_CONNECTION_H
 #include <string>
 
 #include <grpcpp/grpcpp.h>
@@ -31,3 +33,4 @@ class Connection {
 };
 
 }
+#endif

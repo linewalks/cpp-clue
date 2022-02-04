@@ -1,8 +1,7 @@
-
+#ifndef CLUE_CLUE_H
+#define CLUE_CLUE_H
 #include <string>
-
 #include <grpcpp/grpcpp.h>
-
 #include "connection.h"
 
 using std::string;
@@ -22,3 +21,4 @@ class CLUE {
 };
 
 } // namespace clue
+#endif
