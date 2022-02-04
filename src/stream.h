@@ -1,3 +1,5 @@
+#ifndef CLUE_STREAM_H
+#define CLUE_STREAM_H
 #include <condition_variable>
 #include <functional>
 #include <mutex>
@@ -92,3 +94,4 @@ class Stream : public grpc::ClientBidiReactor<Request, Response> {
 };
 
 }
+#endif
