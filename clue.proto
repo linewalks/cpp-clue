@@ -1,20 +1,30 @@
 syntax = "proto3";
 
+
 service CLUE {
   rpc AuthLogin(RequestLogin) returns (ResponseLogin) {}
 
   rpc GetCohortList(RequestCohortList) returns (ResponseCohortList) {}
   rpc GetCohortPersonTable(stream RequestCohortStream) returns (stream PersonInfo) {}
+  rpc GetCohortConditionOccurrenceTable(stream RequestCohortStream) returns (stream ConditionOccurrenceInfo) {}
+  rpc GetCohortDeathTable(stream RequestCohortStream) returns (stream DeathInfo) {}
+  rpc GetCohortDeviceExposureTable(stream RequestCohortStream) returns (stream DeviceExposureInfo) {}
+  rpc GetCohortDrugExposureTable(stream RequestCohortStream) returns (stream DrugExposureInfo) {}
+  rpc GetCohortMeasurementTable(stream RequestCohortStream) returns (stream MeasurementInfo) {}
+  rpc GetCohortObservationPeriodTable(stream RequestCohortStream) returns (stream ObservationPeriodInfo) {}
+  rpc GetCohortObservationTable(stream RequestCohortStream) returns (stream ObservationInfo) {}
+  rpc GetCohortProcedureOccurrenceTable(stream RequestCohortStream) returns (stream ProcedureOccurrenceInfo) {}
+  rpc GetCohortVisitOccurrenceTable(stream RequestCohortStream) returns (stream VisitOccurrenceInfo) {}
 }
 
 message RequestLogin {
-    string email = 1;
-    string password = 2;
+  string email = 1;
+  string password = 2;
 }
 
 message ResponseLogin {
-    string access_token = 1;
-    string refresh_token = 2;
+  string access_token = 1;
+  string refresh_token = 2;
 }
 
 message RequestCohortList {
@@ -26,6 +36,11 @@ message RequestCohortList {
 message CohortInfo {
   int32 id = 1;
   string name = 2;
+  string generated_time = 3;
+  int32 person_count = 4;
+  string done = 5;
+  int32 update_flag = 6;
+  int32 state = 7;
 }
 
 message ResponseCohortList {
@@ -41,18 +56,181 @@ message PersonInfo {
   int32 person_id = 1;
   int32 gender_concept_id = 2;
   int32 year_of_birth = 3;
-  int32 month_of_birth = 4;
-  int32 day_of_birth = 5;
-  int32 race_concept_id = 6;
-  int32 ethnicity_concept_id = 7;
-  int32 location_id = 8;
-  int32 provider_id = 9;
-  int32 care_site_id = 10;
-  string person_source_value = 11;
-  string gender_source_value = 12;
-  int32 gender_source_concept_id = 13;
-  string race_source_value = 14;
-  int32 race_source_concept_id = 15;
-  string ethnicity_source_value = 16;
-  int32 ethnicity_source_concept_id = 17;
+  int32 race_concept_id = 4;
+  int32 ethnicity_concept_id = 5;
+  optional int32 month_of_birth = 6;
+  optional int32 day_of_birth = 7;
+  optional string birth_datetime = 8;
+  optional int32 location_id = 9;
+  optional int32 provider_id = 10;
+  optional int32 care_site_id = 11;
+  optional string person_source_value = 12;
+  optional string gender_source_value = 13;
+  optional int32 gender_source_concept_id = 14;
+  optional string race_source_value = 15;
+  optional int32 race_source_concept_id = 16;
+  optional string ethnicity_source_value = 17;
+  optional int32 ethnicity_source_concept_id = 18;
+}
+
+message ConditionOccurrenceInfo {
+  int32 condition_occurrence_id = 1;
+  int32 person_id = 2;
+  int32 condition_concept_id = 3;
+  string condition_start_date = 4;
+  int32 condition_type_concept_id = 5;
+  optional string condition_start_datetime = 6;
+  optional string condition_end_date = 7;
+  optional string condition_end_datetime = 8;
+  optional int32 condition_status_concept_id = 9;
+  optional string stop_reason = 10;
+  optional int32 provider_id = 11;
+  optional int32 visit_occurrence_id = 12;
+  optional int32 visit_detail_id = 13;
+  optional string condition_source_value = 14;
+  optional int32 condition_source_concept_id = 15;
+  optional string condition_status_source_value = 16;
+}
+
+message DeathInfo {
+  int32 person_id = 1;
+  string death_date = 2;
+  optional string death_datetime = 3;
+  optional int32 death_type_concept_id = 4;
+  optional string cause_concept_id = 5;
+  optional string cause_source_value = 6;
+  optional int32 cause_source_concept_id = 7;
+}
+
+message DeviceExposureInfo {
+  int32 device_exposure_id = 1;
+  int32 person_id = 2;
+  int32 device_concept_id = 3;
+  string device_exposure_start_date = 4;
+  int32 device_type_concept_id = 5;
+  optional string device_exposure_start_datetime = 6;
+  optional string device_exposure_end_date = 7;
+  optional string device_exposure_end_datetime = 8;
+  optional string unique_device_id = 9;
+  optional int32 quantity = 10;
+  optional int32 provider_id = 11;
+  optional int32 visit_occurrence_id = 12;
+  optional int32 visit_detail_id = 13;
+  optional string device_source_value = 14;
+  optional int32 device_source_concept_id = 15;
+}
+
+message DrugExposureInfo {
+  int32 drug_exposure_id = 1;
+  int32 person_id = 2;
+  int32 drug_concept_id = 3;
+  string drug_exposure_start_date = 4;
+  string drug_exposure_end_date = 5;
+  int32 drug_type_concept_id = 6;
+  optional string drug_exposure_start_datetime = 7;
+  optional string drug_exposure_end_datetime = 8;
+  optional string verbatim_end_date = 9;
+  optional string stop_reason = 10;
+  optional int32 refills = 11;
+  optional float quantity = 12;
+  optional int32 days_supply = 13;
+  optional string sig = 14;
+  optional int32 route_concept_id = 15;
+  optional string lot_number = 16;
+  optional int32 provider_id = 17;
+  optional int32 visit_occurrence_id = 18;
+  optional int32 visit_detail_id = 19;
+  optional string drug_source_value = 20;
+  optional int32 drug_source_concept_id = 21;
+  optional string route_source_value = 22;
+  optional string dose_unit_source_value = 23;
+}
+
+message MeasurementInfo {
+  int32 measurement_id = 1;
+  int32 person_id = 2;
+  int32 measurement_concept_id = 3;
+  string measurement_date = 4;
+  int32 measurement_type_concept_id = 5;
+  optional string measurement_datetime = 6;
+  optional string measurement_time = 7;
+  optional int32 operator_concept_id = 8;
+  optional float value_as_number = 9;
+  optional int32 value_as_concept_id = 10;
+  optional int32 unit_concept_id = 11;
+  optional float range_low = 12;
+  optional float range_high = 13;
+  optional int32 provider_id = 14;
+  optional int32 visit_occurrence_id = 15;
+  optional int32 visit_detail_id = 16;
+  optional string measurement_source_value = 17;
+  optional int32 measurement_source_concept_id = 18;
+  optional string unit_source_value = 19;
+  optional string value_source_value = 20;
+}
+
+message ObservationPeriodInfo {
+  int32 observation_period_id = 1;
+  int32 person_id = 2;
+  string observation_period_start_date = 3;
+  string observation_period_end_date = 4;
+  int32 period_type_concept_id = 5;
+}
+
+message ObservationInfo {
+  int32 observation_id = 1;
+  int32 person_id = 2;
+  int32 observation_concept_id = 3;
+  string observation_date = 4;
+  int32 observation_type_concept_id = 5;
+  optional string observation_datetime = 6;
+  optional float value_as_number = 7;
+  optional string value_as_string = 8;
+  optional int32 value_as_concept_id = 9;
+  optional int32 qualifier_concept_id = 10;
+  optional int32 unit_concept_id = 11;
+  optional int32 provider_id = 12;
+  optional int32 visit_occurrence_id = 13;
+  optional int32 visit_detail_id = 14;
+  optional string observation_source_value = 15;
+  optional int32 observation_source_concept_id = 16;
+  optional string unit_source_value = 17;
+  optional int32 qualifier_source_value = 18;
+}
+
+message ProcedureOccurrenceInfo {
+  int32 procedure_occurrence_id = 1;
+  int32 person_id = 2;
+  int32 procedure_concept_id = 3;
+  string procedure_date = 4;
+  int32 procedure_type_concept_id = 5;
+  optional string procedure_datetime = 6;
+  optional int32 modifier_concept_id = 7;
+  optional int32 quantity = 8;
+  optional int32 provider_id = 9;
+  optional int32 visit_occurrence_id = 10;
+  optional int32 visit_detail_id = 11;
+  optional string procedure_source_value = 12;
+  optional int32 procedure_source_concept_id = 13;
+  optional string modifier_source_value = 14;
+}
+
+message VisitOccurrenceInfo {
+  int32 visit_occurrence_id = 1;
+  int32 person_id = 2;
+  int32 visit_concept_id = 3;
+  string visit_start_date = 4;
+  string visit_end_date = 5;
+  int32 visit_type_concept_id = 6;
+  optional string visit_start_datetime = 7;
+  optional string visit_end_datetime = 8;
+  optional int32 provider_id = 9;
+  optional int32 care_site_id = 10;
+  optional string visit_source_value = 11;
+  optional int32 visit_source_concept_id = 12;
+  optional int32 admitting_source_concept_id = 13;
+  optional string admitting_source_value = 14;
+  optional int32 discharge_to_concept_id = 15;
+  optional string discharge_to_source_value = 16;
+  optional int32 preceding_visit_occurrence_id = 17;
 }

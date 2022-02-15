@@ -58,8 +58,8 @@ int main(int argc, char** argv) {
   }
 
   clue::CLUE clue_client(
-      std::string("localhost"),
-      9999,
+      std::string("192.168.0.69"),
+      8889,
       std::string("test@linewalks.com"),
       std::string("q1w2e3r4!"));
 
@@ -93,7 +93,6 @@ int main(int argc, char** argv) {
   std::cout << "Person vector size : " << person_vector.size() << std::endl;
 
   std::cout << "GetCohortPersonTableDone" << std::endl;
-
   person_stream->Close();
   sleep(1);
 
