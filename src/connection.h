@@ -14,7 +14,15 @@ using grpc::Status;
 
 #define INFO(t) t##Info
 #define FUNC(t) GetCohort##t##Table
-#define GET_COHORT_TABLE(t) std::shared_ptr<Stream<RequestCohortStream, INFO(t)>> FUNC(t)(int cohort_id);
+#define GET_COHORT_TABLE(t) std::shared_ptr<Stream<RequestCohortStream, INFO(t)>> FUNC(t)(int cohort_id) { \
+  std::shared_ptr<ClientContext> context(new ClientContext()); \
+  AuthorizeContext(context.get()); \
+  std::shared_ptr<Stream<RequestCohortStream, INFO(t)>> stream( \
+      new Stream<RequestCohortStream, INFO(t)>(stub_.get(), cohort_id)); \
+  stub_->async()->FUNC(t)(context.get(), stream.get()); \
+  stream->Start(); \
+  return stream; \
+};
 
 namespace clue {
 
