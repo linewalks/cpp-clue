@@ -55,12 +55,4 @@ ResponseCohortList Connection::GetCohortList() {
   return GetCohortList(1, 0, "");
 }
 
-std::shared_ptr<Stream<RequestCohortStream, PersonInfo>> Connection::GetCohortPersonTable(int cohort_id) {
-  std::shared_ptr<ClientContext> context(new ClientContext());
-  AuthorizeContext(context.get());
-  std::shared_ptr<Stream<RequestCohortStream, PersonInfo>> person_stream(
-      new Stream<RequestCohortStream, PersonInfo>(stub_.get(), context.get(), cohort_id));
-  return person_stream;
-}
-
 }

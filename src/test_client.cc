@@ -96,5 +96,11 @@ int main(int argc, char** argv) {
   person_stream->Close();
   sleep(1);
 
+  std::shared_ptr<clue::Stream<RequestCohortStream, DeathInfo>> death_stream = conn->GetCohortDeathTable(527);
+  DeathInfo death = death_stream->FetchOne();
+  std::cout << "Death : " << death.person_id() << std::endl;
+  death_stream->Close();
+  sleep(1);
+
   return 0;
 }

@@ -17,10 +17,11 @@ namespace clue {
 template <class Request, class Response>
 class Stream : public grpc::ClientBidiReactor<Request, Response> {
   public:
-    Stream(CLUE::Stub* stub, ClientContext* context, int cohort_id)
+    Stream(CLUE::Stub* stub, int cohort_id)
         : cohort_id_(cohort_id),
-          stop_(false) {
-      stub->async()->GetCohortPersonTable(context, this);
+          stop_(false) {}
+
+    void Start() {
       this->AddHold();
       this->StartCall();
     }
