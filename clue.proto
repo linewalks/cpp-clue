@@ -15,6 +15,8 @@ service CLUE {
   rpc GetCohortObservationTable(stream RequestCohortStream) returns (stream ObservationInfo) {}
   rpc GetCohortProcedureOccurrenceTable(stream RequestCohortStream) returns (stream ProcedureOccurrenceInfo) {}
   rpc GetCohortVisitOccurrenceTable(stream RequestCohortStream) returns (stream VisitOccurrenceInfo) {}
+
+  rpc GetCohortComparison(RequestComparison) returns (ResponseComparison) {}
 }
 
 message RequestLogin {
@@ -233,4 +235,28 @@ message VisitOccurrenceInfo {
   int32 discharge_to_concept_id = 15;
   string discharge_to_source_value = 16;
   int32 preceding_visit_occurrence_id = 17;
+}
+
+message RequestComparison {
+  int32 comparison_id = 1;
+}
+
+message ComparisonCohortInfo {
+  int32 id = 1;
+  string name = 2;
+  int32 person_count = 3;
+}
+
+message ComparisonRowInfo {
+  string category1 = 1;
+  string category2 = 2;
+  repeated string values = 3;
+  float p_value = 4;
+  bool p_value_is_group = 5;
+}
+
+message ResponseComparison {
+  string name = 1;
+  repeated ComparisonCohortInfo cohort_list = 2;
+  repeated ComparisonRowInfo row_list = 3;
 }
