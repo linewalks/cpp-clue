@@ -44,6 +44,8 @@ class Connection {
     GET_COHORT_TABLE(ProcedureOccurrence)
     GET_COHORT_TABLE(VisitOccurrence)
 
+    ResponseComparison GetCohortComparison(int comparison_id);
+
   protected:
     bool Login(string username, string password);
     void AuthorizeContext(ClientContext* context);

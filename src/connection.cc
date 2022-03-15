@@ -45,14 +45,23 @@ ResponseCohortList Connection::GetCohortList(int page, int length, string term) 
 
   ResponseCohortList response;
   stub_->GetCohortList(&context, request, &response);
-
-  // TODO return type을 어떻게 하지....
-  // R과 연결해보고 결정해야할듯
   return response;
 }
 
 ResponseCohortList Connection::GetCohortList() {
   return GetCohortList(1, 0, "");
+}
+
+ResponseComparison Connection::GetCohortComparison(int comparison_id) {
+  RequestComparison request;
+  request.set_comparison_id(comparison_id);
+
+  ClientContext context;
+  AuthorizeContext(&context);
+
+  ResponseComparison response;
+  stub_->GetCohortComparison(&context, request, &response);
+  return response;
 }
 
 }
