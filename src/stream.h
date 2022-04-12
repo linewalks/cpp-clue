@@ -14,11 +14,11 @@ using grpc::ClientReaderWriter;
 
 namespace clue {
 
-template <class Request, class Response>
+template <class RequestCreator, class Request, class Response>
 class Stream : public grpc::ClientBidiReactor<Request, Response> {
   public:
-    Stream(CLUE::Stub* stub, int cohort_id)
-        : cohort_id_(cohort_id),
+    Stream(CLUE::Stub* stub, RequestCreator creator)
+        : request_creator_(creator),
           stop_(false) {}
 
     void Start() {
@@ -74,16 +74,11 @@ class Stream : public grpc::ClientBidiReactor<Request, Response> {
     }
 
     void AddFetchNum(int fetch_num) {
-      Request request;
-      // TODO
-      // 임시 코드임.
-      // set_cohort_id가 항상 있을거라고 보장할 수 없음
-      request.set_cohort_id(cohort_id_);
-      request.set_fetch_num(fetch_num);
-      this->StartWrite(&request);
+      std::shared_ptr<Request> request = request_creator_.get(fetch_num);
+      this->StartWrite(request.get());
     }
 
-    int cohort_id_;
+    RequestCreator request_creator_;
 
     std::mutex mutex_;
     std::condition_variable response_condition_;
