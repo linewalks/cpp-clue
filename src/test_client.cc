@@ -65,6 +65,14 @@ int main(int argc, char** argv) {
 
   std::shared_ptr<clue::Connection> conn = clue_client.Connect();
 
+  ResponseIncidenceRateResult ir_result = conn->GetIncidenceRateResult(459);
+  std::cout << "ir result size " << ir_result.row_list().size() << std::endl;
+
+  std::shared_ptr<clue::Stream<clue::RequestIncidenceRateCreator, RequestIncidenceRateStream, IncidenceRawInfo>> ir_raw_stream = conn->GetIncidenceRateRaw(459);
+  IncidenceRawInfo ir_row = ir_raw_stream->FetchOne();
+  std::cout << ir_row.DebugString() << std::endl;
+  ir_raw_stream->Close();
+
   ResponseCohortList response = conn->GetCohortList(1, 10, "");
   int cohort_size = response.cohort_list_size();
   std::cout << "cohort size " << cohort_size << std::endl;
@@ -77,7 +85,7 @@ int main(int argc, char** argv) {
 
   std::cout << "GetCohortPersonTable" << std::endl;
 
-  std::shared_ptr<clue::Stream<RequestCohortStream, PersonInfo>> person_stream = conn->GetCohortPersonTable(527);
+  std::shared_ptr<clue::Stream<clue::RequestCohortCreator, RequestCohortStream, PersonInfo>> person_stream = conn->GetCohortPersonTable(527);
 
   std::cout << "Outside" << std::endl;
   std::cout << "person_stream " << person_stream << std::endl;
@@ -96,7 +104,7 @@ int main(int argc, char** argv) {
   person_stream->Close();
   sleep(1);
 
-  std::shared_ptr<clue::Stream<RequestCohortStream, DeathInfo>> death_stream = conn->GetCohortDeathTable(527);
+  std::shared_ptr<clue::Stream<clue::RequestCohortCreator, RequestCohortStream, DeathInfo>> death_stream = conn->GetCohortDeathTable(527);
   DeathInfo death = death_stream->FetchOne();
   std::cout << "Death : " << death.person_id() << std::endl;
   death_stream->Close();

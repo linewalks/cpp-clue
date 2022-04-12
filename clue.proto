@@ -17,6 +17,9 @@ service CLUE {
   rpc GetCohortVisitOccurrenceTable(stream RequestCohortStream) returns (stream VisitOccurrenceInfo) {}
 
   rpc GetCohortComparison(RequestComparison) returns (ResponseComparison) {}
+
+  rpc GetIncidenceRateResult(RequestIncidenceRate) returns (ResponseIncidenceRateResult) {}
+  rpc GetIncidenceRateRaw(stream RequestIncidenceRateStream) returns (stream IncidenceRawInfo) {}
 }
 
 message RequestLogin {
@@ -259,4 +262,51 @@ message ResponseComparison {
   string name = 1;
   repeated ComparisonCohortInfo cohort_list = 2;
   repeated ComparisonRowInfo row_list = 3;
+}
+
+message RequestIncidenceRate {
+  int32 incidence_rate_id = 1;
+}
+
+message IncidenceResultRowInfo {
+  int32 target_cohort_id = 1;
+  int32 outcome_cohort_id = 2;
+  int32 target_cohort_person_count = 3;
+  int32 person_count = 4;
+  int32 cases_outcome = 5;
+  float proportion_per_100_persons = 6;
+  float proportion_per_1k_persons = 7;
+  float proportion_per_10k_persons = 8;
+  float time_at_risk_years = 9;
+  float rate_per_100_persons_years = 10;
+  float rate_per_1k_persons_years = 11;
+  float rate_per_10k_persons_years = 12;
+}
+
+message ResponseIncidenceRateResult {
+  repeated IncidenceResultRowInfo row_list = 1;
+}
+
+message RequestIncidenceRateStream {
+  int32 fetch_num = 1;
+  int32 incidence_rate_id = 2;
+}
+
+message IncidenceRawInfo {
+  int32 target_cohort_id = 1;
+  int32 outcome_cohort_id = 2;
+  int32 person_id = 3;
+  int32 person_n = 4;
+  int32 prior_outcome_yn = 5;
+  string index_date_earliest = 6;
+  string index_date_latest = 7;
+  string tar_start_date = 8;
+  string tar_end_date = 9;
+  string cohort_end_date = 10;
+  string observation_period_end_date = 11;
+  string death_date = 12;
+  string censor_date = 13;
+  string o_min_date = 14;
+  int32 o_time = 15;
+  int32 o_status = 16;
 }
