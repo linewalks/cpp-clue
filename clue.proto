@@ -19,7 +19,7 @@ service CLUE {
   rpc GetCohortComparison(RequestComparison) returns (ResponseComparison) {}
 
   rpc GetIncidenceRateResult(RequestIncidenceRate) returns (ResponseIncidenceRateResult) {}
-  rpc GetIncidenceRateRaw(stream RequestIncidenceRateStream) returns (stream IncidenceRawInfo) {}
+  rpc GetIncidenceRateRaw(stream RequestIncidenceRateStream) returns (stream IncidenceRateRawInfo) {}
 }
 
 message RequestLogin {
@@ -268,7 +268,7 @@ message RequestIncidenceRate {
   int32 incidence_rate_id = 1;
 }
 
-message IncidenceResultRowInfo {
+message IncidenceRateResultRowInfo {
   int32 target_cohort_id = 1;
   int32 outcome_cohort_id = 2;
   int32 target_cohort_person_count = 3;
@@ -284,7 +284,7 @@ message IncidenceResultRowInfo {
 }
 
 message ResponseIncidenceRateResult {
-  repeated IncidenceResultRowInfo row_list = 1;
+  repeated IncidenceRateResultRowInfo row_list = 1;
 }
 
 message RequestIncidenceRateStream {
@@ -292,7 +292,7 @@ message RequestIncidenceRateStream {
   int32 incidence_rate_id = 2;
 }
 
-message IncidenceRawInfo {
+message IncidenceRateRawInfo {
   int32 target_cohort_id = 1;
   int32 outcome_cohort_id = 2;
   int32 person_id = 3;
