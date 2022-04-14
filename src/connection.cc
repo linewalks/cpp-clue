@@ -77,11 +77,11 @@ ResponseIncidenceRateResult Connection::GetIncidenceRateResult(int incidence_rat
   return response;
 }
 
-std::shared_ptr<Stream<RequestIncidenceRateCreator, RequestIncidenceRateStream, IncidenceRawInfo>> Connection::GetIncidenceRateRaw(int incidence_rate_id) {
+std::shared_ptr<Stream<RequestIncidenceRateCreator, RequestIncidenceRateStream, IncidenceRateRawInfo>> Connection::GetIncidenceRateRaw(int incidence_rate_id) {
   std::shared_ptr<ClientContext> context(new ClientContext());
   AuthorizeContext(context.get());
-  std::shared_ptr<Stream<RequestIncidenceRateCreator, RequestIncidenceRateStream, IncidenceRawInfo>> stream(
-      new Stream<RequestIncidenceRateCreator, RequestIncidenceRateStream, IncidenceRawInfo>(stub_.get(), incidence_rate_id));
+  std::shared_ptr<Stream<RequestIncidenceRateCreator, RequestIncidenceRateStream, IncidenceRateRawInfo>> stream(
+      new Stream<RequestIncidenceRateCreator, RequestIncidenceRateStream, IncidenceRateRawInfo>(stub_.get(), incidence_rate_id));
   stub_->async()->GetIncidenceRateRaw(context.get(), stream.get());
   stream->Start();
   return stream;

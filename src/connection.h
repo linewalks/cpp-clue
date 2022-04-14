@@ -49,7 +49,7 @@ class Connection {
     ResponseComparison GetCohortComparison(int comparison_id);
 
     ResponseIncidenceRateResult GetIncidenceRateResult(int incidence_rate_id);
-    std::shared_ptr<Stream<RequestIncidenceRateCreator, RequestIncidenceRateStream, IncidenceRawInfo>> GetIncidenceRateRaw(int incidence_rate_id);
+    std::shared_ptr<Stream<RequestIncidenceRateCreator, RequestIncidenceRateStream, IncidenceRateRawInfo>> GetIncidenceRateRaw(int incidence_rate_id);
 
   protected:
     bool Login(string username, string password);

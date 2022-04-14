@@ -68,8 +68,8 @@ int main(int argc, char** argv) {
   ResponseIncidenceRateResult ir_result = conn->GetIncidenceRateResult(459);
   std::cout << "ir result size " << ir_result.row_list().size() << std::endl;
 
-  std::shared_ptr<clue::Stream<clue::RequestIncidenceRateCreator, RequestIncidenceRateStream, IncidenceRawInfo>> ir_raw_stream = conn->GetIncidenceRateRaw(459);
-  IncidenceRawInfo ir_row = ir_raw_stream->FetchOne();
+  std::shared_ptr<clue::Stream<clue::RequestIncidenceRateCreator, RequestIncidenceRateStream, IncidenceRateRawInfo>> ir_raw_stream = conn->GetIncidenceRateRaw(459);
+  IncidenceRateRawInfo ir_row = ir_raw_stream->FetchOne();
   std::cout << ir_row.DebugString() << std::endl;
   ir_raw_stream->Close();
 
