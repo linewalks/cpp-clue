@@ -84,23 +84,12 @@ class Stream : public grpc::ClientBidiReactor<Request, Response> {
     std::shared_ptr<Response> ReadNext() {
       std::unique_lock<std::mutex> lock(mutex_);
 
-      // if (!response_queue_.empty()) {
-      //   return PopResponse();
-      // } else {
       std::shared_ptr<Response> response(new Response());
       ++wait_count_;
-      // std::cout << "start read " << std::endl;
       this->StartRead(response.get());
       response_condition_.wait(lock, [this] { return wait_count_ <= 0 || stop_; });
 
-      if (stop_) {
-        return NULL;
-      }
-      return response;
-        // } else {
-        //   throw std::out_of_range("No more response");
-        // }
-      // }
+      return stop_ ? NULL : response;
     }
 
     void AddFetchNum(int fetch_num) {

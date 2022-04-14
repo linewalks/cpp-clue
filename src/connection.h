@@ -49,16 +49,7 @@ class Connection {
     ResponseComparison GetCohortComparison(int comparison_id);
 
     ResponseIncidenceRateResult GetIncidenceRateResult(int incidence_rate_id);
-    std::shared_ptr<Stream<RequestIncidenceRateCreator, RequestIncidenceRateStream, IncidenceRateRawInfo>> GetIncidenceRateRaw(int incidence_rate_id) {
-        std::shared_ptr<ClientContext> context(new ClientContext());
-        AuthorizeContext(context.get());
-        std::shared_ptr<Stream<RequestIncidenceRateCreator, RequestIncidenceRateStream, IncidenceRateRawInfo>> stream(
-            new Stream<RequestIncidenceRateCreator, RequestIncidenceRateStream, IncidenceRateRawInfo>(stub_.get(), incidence_rate_id));
-        stub_->async()->GetIncidenceRateRaw(context.get(), stream.get());
-        stream->Start();
-        return stream;
-    };
-
+    std::shared_ptr<Stream<RequestIncidenceRateCreator, RequestIncidenceRateStream, IncidenceRateRawInfo>> GetIncidenceRateRaw(int incidence_rate_id);
   protected:
     bool Login(string username, string password);
     void AuthorizeContext(ClientContext* context);
