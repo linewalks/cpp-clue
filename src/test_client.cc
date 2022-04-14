@@ -68,10 +68,13 @@ int main(int argc, char** argv) {
   ResponseIncidenceRateResult ir_result = conn->GetIncidenceRateResult(459);
   std::cout << "ir result size " << ir_result.row_list().size() << std::endl;
 
-  std::shared_ptr<clue::Stream<clue::RequestIncidenceRateCreator, RequestIncidenceRateStream, IncidenceRateRawInfo>> ir_raw_stream = conn->GetIncidenceRateRaw(459);
-  IncidenceRateRawInfo ir_row = ir_raw_stream->FetchOne();
-  std::cout << ir_row.DebugString() << std::endl;
+  std::shared_ptr<clue::Stream<clue::RequestIncidenceRateCreator, RequestIncidenceRateStream, IncidenceRateRawInfo>> ir_raw_stream = conn->GetIncidenceRateRaw(282);
+  std::vector<std::shared_ptr<IncidenceRateRawInfo>> ir_rows;
+  ir_raw_stream->FetchOne();
+  ir_raw_stream->FetchMany(100, &ir_rows);
+  std::cout << "ir rows size : " << ir_rows.size() << std::endl;
   ir_raw_stream->Close();
+  sleep(1);
 
   ResponseCohortList response = conn->GetCohortList(1, 10, "");
   int cohort_size = response.cohort_list_size();
@@ -89,15 +92,16 @@ int main(int argc, char** argv) {
 
   std::cout << "Outside" << std::endl;
   std::cout << "person_stream " << person_stream << std::endl;
-  PersonInfo person = person_stream->FetchOne();
-  std::cout << "Person : " << person.person_id() << std::endl;
+  std::shared_ptr<PersonInfo> person = person_stream->FetchOne();
+  std::cout << "Person : " << person->person_id() << std::endl;
 
   sleep(1);
-  PersonInfo person2 = person_stream->FetchOne();
-  std::cout << "Person2 : " << person2.person_id() << std::endl;
+  std::shared_ptr<PersonInfo> person2 = person_stream->FetchOne();
+  std::cout << "Person2 : " << person2->person_id() << std::endl;
 
   sleep(0.5);
-  std::vector<PersonInfo> person_vector = person_stream->FetchMany(10);
+  std::vector<std::shared_ptr<PersonInfo>> person_vector;
+  person_stream->FetchMany(10, &person_vector);
   std::cout << "Person vector size : " << person_vector.size() << std::endl;
 
   std::cout << "GetCohortPersonTableDone" << std::endl;
@@ -105,8 +109,8 @@ int main(int argc, char** argv) {
   sleep(1);
 
   std::shared_ptr<clue::Stream<clue::RequestCohortCreator, RequestCohortStream, DeathInfo>> death_stream = conn->GetCohortDeathTable(527);
-  DeathInfo death = death_stream->FetchOne();
-  std::cout << "Death : " << death.person_id() << std::endl;
+  std::shared_ptr<DeathInfo> death = death_stream->FetchOne();
+  std::cout << "Death : " << death->person_id() << std::endl;
   death_stream->Close();
   sleep(1);
 
